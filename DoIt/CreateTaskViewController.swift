@@ -31,7 +31,7 @@ class CreateTaskViewController: UIViewController {
         previousVC.tasks.append(task)
         
         previousVC.tblView.reloadData()
-        navigationController!.popViewController(animated: true)
+        navigationController!.popViewController(animated: true) 
     }
     
     override func didReceiveMemoryWarning() {
