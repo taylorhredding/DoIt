@@ -9,7 +9,7 @@
 import UIKit
 
 class TasksViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-
+    
     @IBOutlet weak var tblView: UITableView!
     
     var tasks : [Task] = []
@@ -23,7 +23,7 @@ class TasksViewController: UIViewController, UITableViewDelegate, UITableViewDat
         tblView.dataSource = self
         tblView.delegate = self
     }
-
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tasks.count
     }
@@ -39,7 +39,12 @@ class TasksViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         return cell
     }
-
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let task = tasks[indexPath.row]
+        performSegue(withIdentifier: "selectTaskSegue", sender: task)
+    }
+    
     func makeTask() ->[Task]{
         let task1 = Task()
         task1.name = "Walk the Dog"
@@ -55,14 +60,20 @@ class TasksViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         return [task1, task2, task3]
     }
-
+    
     @IBAction func btnAdd(_ sender: AnyObject) {
         performSegue(withIdentifier: "addSegue", sender: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let nextVC = segue.destination as! CreateTaskViewController
-        nextVC.previousVC = self
+        
+        if segue.identifier == "addSegue"{
+            let nextVC = segue.destination as! CreateTaskViewController
+            nextVC.previousVC = self
+        } else if segue.identifier == "selectTaskSegue"{
+            let nextVC = segue.destination as! CompleteTaskViewController
+            nextVC.task = sender as! Task
+        }
     }
     
 }
