@@ -10,7 +10,7 @@ import UIKit
 
 class CompleteTaskViewController: UIViewController {
 
-    var task = Task()
+    var task : Task? = nil
     
     @IBOutlet weak var lblComplete: UILabel!
     
@@ -18,29 +18,24 @@ class CompleteTaskViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        lblComplete.text = task.name
+        if task!.important {
+            lblComplete.text = "❗️\(task!.name!)"
+        } else {
+            lblComplete.text = task!.name!
+        }
+        
 
         // Do any additional setup after loading the view.
     }
     
     @IBAction func btnComplete(_ sender: AnyObject) {
         
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        context.delete(task!)
+        (UIApplication.shared.delegate as! AppDelegate).saveContext()
+        
+        navigationController!.popViewController(animated: true)
+        
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
